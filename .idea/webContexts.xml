@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/dashboard.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/player_web/crear.jsp" value="file://$PROJECT_DIR$/src/main/webapp/player_web" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/player_web/editar.jsp" value="file://$PROJECT_DIR$/src/main/webapp/player_web" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/torneos_web/crear.jsp" value="file://$PROJECT_DIR$/src/main/webapp/torneos_web" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/torneos_web/crearTorneo.jsp" value="file://$PROJECT_DIR$/src/main/webapp/torneos_web" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/torneos_web/editar.jsp" value="file://$PROJECT_DIR$/src/main/webapp/torneos_web" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/torneos_web/eliminar.jsp" value="file://$PROJECT_DIR$/src/main/webapp/torneos_web" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/torneos_web/insertar.jsp" value="file://$PROJECT_DIR$/src/main/webapp/torneos_web" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/torneos_web/lista.jsp" value="file://$PROJECT_DIR$/src/main/webapp/torneos_web" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/torneos_web/vistaDetalle.jsp" value="file://$PROJECT_DIR$/src/main/webapp/torneos_web" />
+      </map>
+    </option>
+  </component>
+</project>
