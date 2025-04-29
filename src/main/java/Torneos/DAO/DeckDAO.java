@@ -24,11 +24,13 @@ public class DeckDAO {
     private final static String COLUMN_PORCENTAJE_TIERRAS = "porcentaje_tierras";
     private final static String COLUMN_FECHA_ENVIO = "fecha_envio";
     private final static String COLUMN_VALIDO = "valido";
+    private final static String COLUMN_JUGADOR_ID = "jugador_id";
+
 
     public void add(Deck deck) throws SQLException {
         String sql = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_NOMBRE + ", " + COLUMN_CONTENIDO + ", " +
                 COLUMN_CARTAS_TOTALES + ", " + COLUMN_PORCENTAJE_TIERRAS + ", " + COLUMN_FECHA_ENVIO + ", " +
-                COLUMN_VALIDO + ") VALUES (?, ?, ?, ?, ?, ?)";
+                COLUMN_VALIDO + ", " + COLUMN_JUGADOR_ID + ") VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, deck.getNombre());
             stmt.setString(2, deck.getContenido());
@@ -36,6 +38,7 @@ public class DeckDAO {
             stmt.setInt(4, deck.getPorcentajeTierras());
             stmt.setDate(5, new java.sql.Date(deck.getFechaEnvio().getTime()));
             stmt.setBoolean(6, deck.isValido());
+            stmt.setInt(7, deck.getPlayerId());
 
             stmt.executeUpdate();
         }
@@ -43,7 +46,7 @@ public class DeckDAO {
     public ArrayList<Deck> getAll() throws SQLException {
         ArrayList<Deck> decks = new ArrayList<>();
         String sql = "SELECT " + COLUMN_ID + ", " + COLUMN_NOMBRE + ", " + COLUMN_CONTENIDO + ", " + COLUMN_CARTAS_TOTALES + ", "
-                + COLUMN_PORCENTAJE_TIERRAS + ", " + COLUMN_FECHA_ENVIO + ", " + COLUMN_VALIDO + " FROM " + TABLE_NAME;
+                + COLUMN_PORCENTAJE_TIERRAS + ", " + COLUMN_FECHA_ENVIO + ", " + COLUMN_VALIDO + ", " + COLUMN_JUGADOR_ID + " FROM " + TABLE_NAME;
 
         try (PreparedStatement stmt = conexion.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -57,6 +60,7 @@ public class DeckDAO {
                 deck.setPorcentajeTierras(rs.getInt(COLUMN_PORCENTAJE_TIERRAS));
                 deck.setFechaEnvio(rs.getDate(COLUMN_FECHA_ENVIO));
                 deck.setValido(rs.getBoolean(COLUMN_VALIDO));
+                deck.setPlayerId(rs.getInt(COLUMN_JUGADOR_ID));
                 decks.add(deck);
             }
         }
@@ -73,7 +77,8 @@ public class DeckDAO {
                 + COLUMN_CARTAS_TOTALES + ", "
                 + COLUMN_PORCENTAJE_TIERRAS + ", "
                 + COLUMN_FECHA_ENVIO + ", "
-                + COLUMN_VALIDO
+                + COLUMN_VALIDO + ", "
+                + COLUMN_JUGADOR_ID
                 + " FROM " + TABLE_NAME + " WHERE 1=1");
 
         if (nombre != null && !nombre.isEmpty()) {
@@ -103,6 +108,7 @@ public class DeckDAO {
                     deck.setPorcentajeTierras(resultSet.getInt(COLUMN_PORCENTAJE_TIERRAS));
                     deck.setFechaEnvio(resultSet.getDate(COLUMN_FECHA_ENVIO));
                     deck.setValido(resultSet.getBoolean(COLUMN_VALIDO));
+                    deck.setPlayerId(resultSet.getInt(COLUMN_JUGADOR_ID));
 
                     resultados.add(deck);
                 }
@@ -114,9 +120,12 @@ public class DeckDAO {
 
     public Deck buscarPorId(int id) throws SQLException {
         Deck deck = null;
-        String sql = "SELECT " + COLUMN_ID + ", " + COLUMN_NOMBRE + ", " + COLUMN_CONTENIDO + ", " +
-                COLUMN_CARTAS_TOTALES + ", " + COLUMN_PORCENTAJE_TIERRAS + ", " + COLUMN_FECHA_ENVIO + ", " + COLUMN_VALIDO +
-                " FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
+        String sql = "SELECT d." + COLUMN_ID + ", d." + COLUMN_NOMBRE + ", d." + COLUMN_CONTENIDO + ", " +
+                "d." + COLUMN_CARTAS_TOTALES + ", d." + COLUMN_PORCENTAJE_TIERRAS + ", d." + COLUMN_FECHA_ENVIO + ", " +
+                "d." + COLUMN_VALIDO + ", d." + COLUMN_JUGADOR_ID + ", p.nickname " +
+                "FROM " + TABLE_NAME + " d " +
+                "JOIN player p ON d." + COLUMN_JUGADOR_ID + " = p.id " +
+                "WHERE d." + COLUMN_ID + " = ?";
 
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -131,11 +140,14 @@ public class DeckDAO {
                 deck.setPorcentajeTierras(rs.getInt(COLUMN_PORCENTAJE_TIERRAS));
                 deck.setFechaEnvio(rs.getDate(COLUMN_FECHA_ENVIO));
                 deck.setValido(rs.getBoolean(COLUMN_VALIDO));
+                deck.setPlayerId(rs.getInt(COLUMN_JUGADOR_ID));
+                deck.setPlayerNickname(rs.getString("nickname"));
             }
         }
 
         return deck;
     }
+
     public boolean actualizar(Deck deck) {
         String query = "UPDATE " + TABLE_NAME + " SET " +
                 COLUMN_NOMBRE + " = ?, " +
@@ -143,7 +155,8 @@ public class DeckDAO {
                 COLUMN_CARTAS_TOTALES + " = ?, " +
                 COLUMN_PORCENTAJE_TIERRAS + " = ?, " +
                 COLUMN_FECHA_ENVIO + " = ?, " +
-                COLUMN_VALIDO + " = ? " +
+                COLUMN_VALIDO + " = ?, " +
+                COLUMN_JUGADOR_ID + " = ? " +
                 "WHERE " + COLUMN_ID + " = ?";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
@@ -153,7 +166,9 @@ public class DeckDAO {
             stmt.setInt(4, deck.getPorcentajeTierras());
             stmt.setDate(5, new java.sql.Date(deck.getFechaEnvio().getTime()));
             stmt.setBoolean(6, deck.isValido());
-            stmt.setInt(7, deck.getId());
+            stmt.setInt(7, deck.getPlayerId());
+            stmt.setInt(8, deck.getId());
+
 
             int filasAfectadas = stmt.executeUpdate();
             return filasAfectadas > 0;

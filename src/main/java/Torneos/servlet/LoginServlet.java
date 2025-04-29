@@ -13,7 +13,6 @@ import Torneos.Objetos.Player;
 public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obtener parámetros de la solicitud
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
         String mensaje = "";
@@ -26,7 +25,6 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        // Conectar a la base de datos
         Database database = new Database();
         try {
             database.connect();
@@ -56,8 +54,8 @@ public class LoginServlet extends HttpServlet {
             // Inicio de sesión exitoso
             HttpSession session = request.getSession();
             session.setAttribute("player", player);
-            session.setAttribute("isAdmin", player.isAdministrador()); // Guardamos el estado de administrador en la sesión
-            response.sendRedirect("dashboard.jsp"); // Redirigir al panel de control
+            session.setAttribute("isAdmin", player.isAdministrador());
+            response.sendRedirect("dashboard.jsp");
         } else {
             // Inicio de sesión fallido
             mensaje = "Nombre de usuario o contraseña incorrectos.";
@@ -65,7 +63,6 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
 
-        // Desconectar de la base de datos
         try {
             database.disconect();
         } catch (SQLException e) {

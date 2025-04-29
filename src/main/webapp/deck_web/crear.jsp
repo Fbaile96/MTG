@@ -5,6 +5,15 @@
 <%@ page import="java.time.LocalDate" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="../utiles/header.jsp" />
+<%@ page import="Torneos.Objetos.Player" %>
+<%
+    Player jugador = (Player) session.getAttribute("player");
+    if (jugador == null) {
+        response.sendRedirect("../login.jsp");
+        return;
+    }
+%>
+
 <%
     Database database = new Database();
     database.connect();
@@ -28,6 +37,7 @@
             deck.setPorcentajeTierras(porcentajeTierras);
             deck.setFechaEnvio(fechaEnvio);
             deck.setValido(valido);
+            deck.setPlayerId(jugador.getId());
 
             deckDao.add(deck);
             mensaje = "Mazo registrado correctamente.";

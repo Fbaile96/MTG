@@ -13,6 +13,8 @@ public class Deck {
     private int porcentajeTierras;
     private Date fechaEnvio;
     private boolean valido;
+    private int playerId;
+    private String playerNickname;
 
     public Deck(int id, String nombre, String contenido, int cartasTotales, int porcentajeTierras , Date fechaEnvio,
                 boolean valido) {

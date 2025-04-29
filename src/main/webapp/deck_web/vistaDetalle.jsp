@@ -27,6 +27,7 @@
                 <th>Porcentaje Tierras</th>
                 <th>Fecha Envío</th>
                 <th>Válido</th>
+                <th>Creador</th>
                 <th>Acciones</th>
             </tr>
             </thead>
@@ -47,6 +48,8 @@
                 <td><%= deck.getPorcentajeTierras() %>%</td>
                 <td><%= deck.getFechaEnvio() %></td>
                 <td><%= deck.isValido() ? "Sí" : "No" %></td>
+                <td><%= deck.getPlayerNickname() %></td>
+
                 <td>
                     <% if (isAdmin != null && isAdmin) { %>
 
