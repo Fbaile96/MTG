@@ -1,5 +1,6 @@
 <%@ page import="java.sql.*, java.text.*, java.util.*, Torneos.DAO.TournamentDAO, Torneos.Objetos.Tournament, Torneos.Database.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="../utiles/header.jsp" />
 <%
   Database database = new Database();
   database.connect();
@@ -106,9 +107,10 @@
     </div>
   </div>
   <div class="d-grid gap-2">
-    <a href="../index.jsp" class="btn btn-secondary">Volver</a>
+    <a href="../main.jsp" class="btn btn-secondary">Volver</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<jsp:include page="../utiles/footer.jsp" />

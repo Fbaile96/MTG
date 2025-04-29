@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,6 +8,14 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
+<header>
+  <nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="main.jsp">Torneos MTG</a>
+      <a href="login.jsp" class="btn btn-outline-light">Ingresar</a>
+    </div>
+  </nav>
+</header>
 
 <div class="container mt-5">
   <h2 class="text-center mb-4">Iniciar sesión</h2>
@@ -40,3 +49,4 @@
 
 </body>
 </html>
+<jsp:include page="utiles/footer.jsp" />

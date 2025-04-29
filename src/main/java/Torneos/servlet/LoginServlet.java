@@ -3,11 +3,13 @@ package Torneos.servlet;
 import java.io.*;
 import java.sql.*;
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import Torneos.Database.Database;
 import Torneos.DAO.PlayerDAO;
 import Torneos.Objetos.Player;
 
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,6 +56,7 @@ public class LoginServlet extends HttpServlet {
             // Inicio de sesión exitoso
             HttpSession session = request.getSession();
             session.setAttribute("player", player);
+            session.setAttribute("isAdmin", player.isAdministrador()); // Guardamos el estado de administrador en la sesión
             response.sendRedirect("dashboard.jsp"); // Redirigir al panel de control
         } else {
             // Inicio de sesión fallido

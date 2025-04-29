@@ -2,6 +2,7 @@
 <%@ page import="Torneos.Database.Database" %>
 <%@ page import="Torneos.DAO.DeckDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="../utiles/header.jsp" />
 <%
     String mensaje = "";
     Deck deck = null;
@@ -87,3 +88,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<jsp:include page="../utiles/footer.jsp" />

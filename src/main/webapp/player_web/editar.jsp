@@ -2,6 +2,7 @@
 <%@ page import="Torneos.Database.Database" %>
 <%@ page import="Torneos.DAO.PlayerDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="../utiles/header.jsp" />
 <%
   String mensaje = "";
   Player Player = null;
@@ -93,3 +94,4 @@
 </div>
 </body>
 </html>
+<jsp:include page="../utiles/footer.jsp" />

@@ -4,6 +4,7 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="../utiles/header.jsp" />
 <%
   String mensaje = "";
   Tournament torneo = null;
@@ -116,3 +117,4 @@
 </div>
 </body>
 </html>
+<jsp:include page="../utiles/footer.jsp" />

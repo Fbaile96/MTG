@@ -4,6 +4,7 @@
 <%@ page import="Torneos.Objetos.Tournament" %>
 <%@ page import="Torneos.DAO.TournamentDAO" %>
 <%@ page import="Torneos.Database.Database" %>
+<jsp:include page="../utiles/header.jsp" />
 
 <!DOCTYPE html>
 <html lang="es">
@@ -97,3 +98,4 @@
 
 </body>
 </html>
+<jsp:include page="../utiles/footer.jsp" />

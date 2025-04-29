@@ -1,5 +1,6 @@
 <%@ page import="java.sql.*, java.text.*, java.util.*, Torneos.DAO.TournamentDAO, Torneos.Objetos.Tournament, Torneos.Database.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="../utiles/header.jsp" />
 <%
   Database database = new Database();
   database.connect();
@@ -192,3 +193,4 @@
 </script>
 </body>
 </html>
+<jsp:include page="../utiles/footer.jsp" />

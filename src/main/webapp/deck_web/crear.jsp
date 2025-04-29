@@ -4,6 +4,7 @@
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="../utiles/header.jsp" />
 <%
     Database database = new Database();
     database.connect();
@@ -143,3 +144,4 @@
 </script>
 </body>
 </html>
+<jsp:include page="../utiles/footer.jsp" />

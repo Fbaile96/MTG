@@ -8,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+
 <header>
   <nav class="navbar navbar-dark bg-dark mb-4">
     <div class="container-fluid">
@@ -23,6 +24,12 @@
     <h1 class="mb-4">Gestiona tus Torneos</h1>
     <div class="row justify-content-center g-3">
 
+      <% if (isAdmin) { %>
+      <div class="col-md-4">
+        <a href="torneos_web/crear.jsp" class="btn btn-success w-100 p-3">Crear Torneo</a>
+      </div>
+      <% } %>
+
       <div class="col-md-4">
         <a href="torneos_web/lista.jsp" class="btn btn-warning w-100 p-3">Lista Torneo</a>
       </div>
@@ -36,6 +43,12 @@
   <div class="container text-center">
     <h1 class="mb-4">Gestiona tus Jugadores</h1>
     <div class="row justify-content-center g-3">
+
+      <% if (isAdmin) { %>
+      <div class="col-md-4">
+        <a href="player_web/crear.jsp" class="btn btn-success w-100 p-3">Crear Jugador</a>
+      </div>
+      <% } %>
 
       <div class="col-md-4">
         <a href="player_web/lista.jsp" class="btn btn-warning w-100 p-3">Lista Jugador</a>
@@ -51,6 +64,9 @@
     <h1 class="mb-4">Gestiona tus mazos</h1>
     <div class="row justify-content-center g-3">
 
+      <div class="col-md-4">
+        <a href="deck_web/crear.jsp" class="btn btn-success w-100 p-3">Crear Deck</a>
+      </div>
 
       <div class="col-md-4">
         <a href="deck_web/lista.jsp" class="btn btn-warning w-100 p-3">Lista Deck</a>

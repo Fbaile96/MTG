@@ -61,19 +61,9 @@ public class Player {
     }
 
     public boolean verificarPassword(String passwordInput) {
-        // Compara el hash de la contraseña introducida con la contraseña almacenada
-        return this.password.equals(hashPassword(passwordInput));
+        return this.password.equals(passwordInput);
     }
 
-    // Método para encriptar la contraseña con SHA-256 y devolverla en Base64
-    public static String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashedBytes = md.digest(password.getBytes());
-            return Base64.getEncoder().encodeToString(hashedBytes);
-        } catch (NoSuchAlgorithmException e) {
-            // Si ocurre un error en la creación del hash, lanzamos una RuntimeException
-            throw new RuntimeException("Error al generar el hash de la contraseña", e);
-        }
-    }
+
+
 }

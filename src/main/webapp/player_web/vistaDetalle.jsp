@@ -2,6 +2,8 @@
 <%@ page import="Torneos.Database.Database" %>
 <%@ page import="Torneos.DAO.PlayerDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="../utiles/header.jsp" />
+<%Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -49,11 +51,20 @@
                 <td><%= jugador.isActivo() ? "Sí" : "No" %></td>
                 <td><%= jugador.isAdministrador() ? "Sí" : "No" %></td>
                 <td>
-                    <a href="editar.jsp?id=<%= jugador.getId() %>" class="btn btn-warning btn-sm">Editar</a>
-                    <form action="eliminar.jsp" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= jugador.getId() %>">
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
+                    <% if (isAdmin != null && isAdmin) { %>
+                    <!-- Solo los administradores pueden ver estas opciones -->
+                    <div class="btn-group btn-group-sm">
+                        <a href="editar.jsp?id=<%= jugador.getId() %>" class="btn btn-outline-primary">
+                            <i class="bi bi-pencil"></i> Modificar
+                        </a>
+                        <form action="eliminar.jsp" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="<%= jugador.getId() %>">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </div>
+                    <% } else { %>
+                    <div>Requiere Admin</div>
+                    <% } %>
                 </td>
             </tr>
             <%
@@ -65,10 +76,11 @@
     </div>
 
     <div class="d-grid gap-2">
-        <a href="../index.jsp" class="btn btn-secondary">Volver</a>
+        <a href="../main.jsp" class="btn btn-secondary">Volver</a>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<jsp:include page="../utiles/footer.jsp" />

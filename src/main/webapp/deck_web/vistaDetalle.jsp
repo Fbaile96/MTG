@@ -2,6 +2,8 @@
 <%@ page import="Torneos.Database.Database" %>
 <%@ page import="Torneos.DAO.DeckDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="../utiles/header.jsp" />
+<%Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -46,11 +48,16 @@
                 <td><%= deck.getFechaEnvio() %></td>
                 <td><%= deck.isValido() ? "Sí" : "No" %></td>
                 <td>
+                    <% if (isAdmin != null && isAdmin) { %>
+
                     <a href="editar.jsp?id=<%= deck.getId() %>" class="btn btn-warning btn-sm">Editar</a>
                     <form action="eliminar.jsp" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="<%= deck.getId() %>">
                         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                     </form>
+                    <% } else { %>
+                    <div>Requiere Admin</div>
+                    <% } %></td>
                 </td>
             </tr>
             <%
@@ -69,3 +76,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<jsp:include page="../utiles/footer.jsp" />
