@@ -8,9 +8,23 @@
     List<Deck> decks = new ArrayList<>();
     String mensaje = "";
     String tipoMensaje = "";
+    int pagina = 1;
+    int decksPorPagina = 4;
+
+    String paramPagina = request.getParameter("pagina");
+    if (paramPagina != null) {
+        try {
+            pagina = Integer.parseInt(paramPagina);
+            if (pagina < 1) pagina = 1;
+        } catch (NumberFormatException e) {
+            pagina = 1;
+        }
+    }
+
+    int offset = (pagina - 1) * decksPorPagina;
 
     try {
-        decks = deckDao.getAll();  // Obtenemos todos los decks
+        decks = deckDao.getAllPaginado(decksPorPagina, offset);
     } catch (Exception e) {
         mensaje = "Error al recuperar los decks: " + e.getMessage();
         tipoMensaje = "danger";
@@ -68,7 +82,6 @@
                         <th>Nombre</th>
                         <th>Cartas Totales</th>
                         <th>Porcentaje Tierras</th>
-                        <th>Fecha Envío</th>
                         <th>Válido</th>
                         <th>Acciones</th>
                     </tr>
@@ -79,7 +92,6 @@
                         <td><%= deck.getNombre() %></td>
                         <td><%= deck.getCartasTotales() %></td>
                         <td><%= deck.getPorcentajeTierras() %>%</td>
-                        <td><%= deck.getFechaEnvio() %></td>
                         <td>
                             <% if (deck.isValido()) { %>
                             <span class="badge bg-success">Sí</span>
@@ -105,6 +117,24 @@
     <div class="d-grid gap-2">
         <a href="../main.jsp" class="btn btn-secondary">Volver</a>
     </div>
+    <div class="d-flex justify-content-between mt-3">
+        <% if (pagina > 1) { %>
+        <a href="lista.jsp?pagina=<%= pagina - 1 %>" class="btn btn-outline-primary">
+            <i class="bi bi-chevron-left"></i> Anterior
+        </a>
+        <% } else { %>
+        <span></span>
+        <% } %>
+
+        <% if (decks.size() == decksPorPagina) { %>
+        <a href="lista.jsp?pagina=<%= pagina + 1 %>" class="btn btn-outline-primary">
+            Siguiente <i class="bi bi-chevron-right"></i>
+        </a>
+        <% } else { %>
+        <span></span>
+        <% } %>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

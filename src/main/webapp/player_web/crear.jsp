@@ -35,7 +35,6 @@
             player.setEmail(email);
             player.setNickname(nickname);
             player.setPuntosRanking(puntosRanking);
-            player.setFechaRegistro(sqlFechaRegistro); //todo Usar java.sql.Date aquí
             player.setActivo(activo);
             player.setPassword(password);
             player.setAdministrador(administrador);

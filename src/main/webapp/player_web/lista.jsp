@@ -8,9 +8,23 @@
     List<Player> jugadores = new ArrayList<>();
     String mensaje = "";
     String tipoMensaje = "";
+    int pagina = 1;
+    int jugadoresPorPagina = 4;
+
+    String paramPagina = request.getParameter("pagina");
+    if (paramPagina != null) {
+        try {
+            pagina = Integer.parseInt(paramPagina);
+            if (pagina < 1) pagina = 1;
+        } catch (NumberFormatException e) {
+            pagina = 1;
+        }
+    }
+
+    int offset = (pagina - 1) * jugadoresPorPagina;
 
     try {
-        jugadores = playerDao.getAll();
+        jugadores = playerDao.getAllPaginado(jugadoresPorPagina, offset);
     } catch (Exception e) {
         mensaje = "Error al recuperar los jugadores: " + e.getMessage();
         tipoMensaje = "danger";
@@ -65,10 +79,7 @@
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
-                        <th>Nombre</th>
                         <th>Nickname</th>
-                        <th>Email</th>
-                        <th>Puntos de Ranking</th>
                         <th>Activo</th>
                         <th>Administrador</th>
                         <th>Acciones</th>
@@ -77,10 +88,7 @@
                     <tbody>
                     <% for (Player jugador : jugadores) { %>
                     <tr>
-                        <td><%= jugador.getNombre() %></td>
                         <td><%= jugador.getNickname() %></td>
-                        <td><%= jugador.getEmail() %></td>
-                        <td><%= jugador.getPuntosRanking() %></td>
                         <td>
                             <% if (jugador.isActivo()) { %>
                             <span class="badge bg-success">Sí</span>
@@ -112,6 +120,23 @@
     </div>
     <div class="d-grid gap-2">
         <a href="../main.jsp" class="btn btn-secondary">Volver</a>
+    </div>
+    <div class="d-flex justify-content-between mt-3">
+        <% if (pagina > 1) { %>
+        <a href="lista.jsp?pagina=<%= pagina - 1 %>" class="btn btn-outline-primary">
+            <i class="bi bi-chevron-left"></i> Anterior
+        </a>
+        <% } else { %>
+        <span></span>
+        <% } %>
+
+        <% if (jugadores.size() == jugadoresPorPagina) { %>
+        <a href="lista.jsp?pagina=<%= pagina + 1 %>" class="btn btn-outline-primary">
+            Siguiente <i class="bi bi-chevron-right"></i>
+        </a>
+        <% } else { %>
+        <span></span>
+        <% } %>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
