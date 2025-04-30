@@ -178,6 +178,33 @@ public class TournamentDAO {
         }
 
     }
+    public ArrayList<Tournament> listAll(int limit, int offset) throws SQLException {
+        String sql = "SELECT * FROM tournament LIMIT ? OFFSET ?";
+        PreparedStatement statement = conexion.prepareStatement(sql);
+
+        statement.setInt(1, limit);
+        statement.setInt(2, offset);
+
+        ResultSet result = statement.executeQuery();
+        ArrayList<Tournament> tournamentList = new ArrayList<>();
+
+        while (result.next()) {
+            Tournament tournament = new Tournament();
+            tournament.setId(result.getInt("id"));
+            tournament.setNombre(result.getString("nombre"));
+            tournament.setFormato(result.getString("formato"));
+            tournament.setFechaInicio(result.getDate("fecha_inicio"));
+            tournament.setFechaFin(result.getDate("fecha_fin"));
+            tournament.setPremio(result.getFloat("premio"));
+            tournament.setMaxJugadores(result.getInt("max_jugadores"));
+            tournament.setInvitacion(result.getBoolean("invitacion"));
+            tournamentList.add(tournament);
+        }
+        statement.close();
+
+        return tournamentList;
+
+    }
 
 
 

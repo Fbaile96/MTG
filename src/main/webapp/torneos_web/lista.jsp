@@ -8,9 +8,23 @@
   List<Tournament> torneos = new ArrayList<>();
   String mensaje = "";
   String tipoMensaje = "";
+  int pagina = 1;
+  int torneosPorPagina = 4;
+
+  String paramPagina = request.getParameter("pagina");
+  if (paramPagina != null) {
+    try {
+      pagina = Integer.parseInt(paramPagina);
+      if (pagina < 1) pagina = 1;
+    } catch (NumberFormatException e) {
+      pagina = 1;
+    }
+  }
+
+  int offset = (pagina - 1) * torneosPorPagina;
 
   try {
-    torneos = torneoDAO.getAll();
+    torneos = torneoDAO.listAll(torneosPorPagina, offset);
   } catch (Exception e) {
     mensaje = "Error al recuperar los torneos: " + e.getMessage();
     tipoMensaje = "danger";
@@ -67,10 +81,7 @@
           <tr>
             <th>Nombre</th>
             <th>Formato</th>
-            <th>Fecha Inicio</th>
-            <th>Fecha Fin</th>
             <th>Premio (€)</th>
-            <th>Max. Jugadores</th>
             <th>Por Invitación</th>
             <th>Acciones</th>
           </tr>
@@ -80,10 +91,7 @@
           <tr>
             <td><%= torneo.getNombre() %></td>
             <td><%= torneo.getFormato() %></td>
-            <td><%= new SimpleDateFormat("dd/MM/yyyy").format(torneo.getFechaInicio()) %></td>
-            <td><%= new SimpleDateFormat("dd/MM/yyyy").format(torneo.getFechaFin()) %></td>
             <td><%= String.format("%.2f", torneo.getPremio()) %></td>
-            <td><%= torneo.getMaxJugadores() %></td>
             <td>
               <% if (torneo.isInvitacion()) { %>
               <span class="badge bg-info">Sí</span>
@@ -109,6 +117,23 @@
   <div class="d-grid gap-2">
     <a href="../main.jsp" class="btn btn-secondary">Volver</a>
 </div>
+  <div class="d-flex justify-content-between mt-3">
+    <% if (pagina > 1) { %>
+    <a href="lista.jsp?pagina=<%= pagina - 1 %>" class="btn btn-outline-primary">
+      <i class="bi bi-chevron-left"></i> Anterior
+    </a>
+    <% } else { %>
+    <span></span>
+    <% } %>
+
+    <% if (torneos.size() == torneosPorPagina) { %>
+    <a href="lista.jsp?pagina=<%= pagina + 1 %>" class="btn btn-outline-primary">
+      Siguiente <i class="bi bi-chevron-right"></i>
+    </a>
+    <% } else { %>
+    <span></span>
+    <% } %>
+  </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

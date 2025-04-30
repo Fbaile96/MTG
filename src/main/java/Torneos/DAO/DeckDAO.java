@@ -190,4 +190,34 @@ public class DeckDAO {
             return false;
         }
     }
+    public ArrayList<Deck> getAllPaginado(int limite, int offset) throws SQLException {
+        ArrayList<Deck> decks = new ArrayList<>();
+        String sql = "SELECT " + COLUMN_ID + ", " + COLUMN_NOMBRE + ", " + COLUMN_CONTENIDO + ", "
+                + COLUMN_CARTAS_TOTALES + ", " + COLUMN_PORCENTAJE_TIERRAS + ", " + COLUMN_FECHA_ENVIO + ", "
+                + COLUMN_VALIDO + ", " + COLUMN_JUGADOR_ID + " FROM " + TABLE_NAME
+                + " LIMIT ? OFFSET ?";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, limite);
+            stmt.setInt(2, offset);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Deck deck = new Deck();
+                    deck.setId(rs.getInt(COLUMN_ID));
+                    deck.setNombre(rs.getString(COLUMN_NOMBRE));
+                    deck.setContenido(rs.getString(COLUMN_CONTENIDO));
+                    deck.setCartasTotales(rs.getInt(COLUMN_CARTAS_TOTALES));
+                    deck.setPorcentajeTierras(rs.getInt(COLUMN_PORCENTAJE_TIERRAS));
+                    deck.setFechaEnvio(rs.getDate(COLUMN_FECHA_ENVIO));
+                    deck.setValido(rs.getBoolean(COLUMN_VALIDO));
+                    deck.setPlayerId(rs.getInt(COLUMN_JUGADOR_ID));
+                    decks.add(deck);
+                }
+            }
+        }
+        return decks;
+    }
+
+
 }

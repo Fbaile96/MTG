@@ -17,7 +17,8 @@ public class PlayerDAO {
 
     public void add (Player player) throws SQLException{
         String sql = "INSERT INTO player (nombre, email, nickname, " +
-                "puntos_ranking, fecha_registro, activo, password, administrador) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "puntos_ranking, fecha_registro, activo, password, administrador) " +
+                "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)";
         PreparedStatement statement = null;
         statement = conexion.prepareStatement(sql);
 
@@ -25,10 +26,9 @@ public class PlayerDAO {
             statement.setString(2, player.getEmail());
             statement.setString(3, player.getNickname());
             statement.setInt(4, player.getPuntosRanking());
-            statement.setDate(5, (Date) player.getFechaRegistro());
-            statement.setBoolean(6, player.isActivo());
-            statement.setString(7, player.getPassword());
-            statement.setBoolean(8, player.isAdministrador());
+            statement.setBoolean(5, player.isActivo());
+            statement.setString(6, player.getPassword());
+            statement.setBoolean(7, player.isAdministrador());
 
             statement.executeUpdate();
 
@@ -206,5 +206,37 @@ public class PlayerDAO {
         }
         return null;
     }
+
+    public ArrayList<Player> getAllPaginado(int limit, int offset) throws SQLException {
+        String sql = "SELECT id, nickname, activo, administrador FROM player LIMIT ? OFFSET ?";
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Player> jugadorList = new ArrayList<>();
+
+        try {
+            stmt = conexion.prepareStatement(sql);
+            stmt.setInt(1, limit);
+            stmt.setInt(2, offset);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Player jugador = new Player();
+                jugador.setId(rs.getInt("id"));
+                jugador.setNickname(rs.getString("nickname"));
+                jugador.setActivo(rs.getBoolean("activo"));
+                jugador.setAdministrador(rs.getBoolean("administrador"));
+                jugadorList.add(jugador);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener los jugadores: " + e.getMessage(), e);
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+        }
+
+        return jugadorList;
+    }
+
+
 
 }
