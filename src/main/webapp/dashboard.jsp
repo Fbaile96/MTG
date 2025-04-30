@@ -28,14 +28,14 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container-fluid">
             <a class="navbar-brand" href="main.jsp">Torneos MTG</a>
-            <a href="login.jsp" class="btn btn-outline-light">Ingresar</a>
+            <a href="utiles/perfil.jsp" class="btn btn-outline-light">Mi perfil</a>
+            <a href="utiles/login.jsp" class="btn btn-outline-light">Ingresar</a>
         </div>
     </nav>
 </header>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Bienvenido, <%= player.getNickname() %></h2>
-    <p class="lead">¡Has iniciado sesión correctamente!</p>
 
 </div>
 <!-- Contenido principal -->
@@ -96,7 +96,6 @@
         </div>
     </div>
 </div>
-<div><a href="Logout" class="btn btn-danger">Cerrar sesión</a></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

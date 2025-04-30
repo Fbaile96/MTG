@@ -236,6 +236,17 @@ public class PlayerDAO {
 
         return jugadorList;
     }
+    public void update(Player jugador) throws SQLException {
+        String sql = "UPDATE player SET nombre = ?, email = ?, nickname = ?, password = ? WHERE id = ?";
+        PreparedStatement statement = conexion.prepareStatement(sql);
+        statement.setString(1, jugador.getNombre());
+        statement.setString(2, jugador.getEmail());
+        statement.setString(3, jugador.getNickname());
+        statement.setString(4, jugador.getPassword());
+        statement.setInt(5, jugador.getId());
+
+        statement.executeUpdate();
+    }
 
 
 
