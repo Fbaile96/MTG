@@ -3,6 +3,9 @@
 <%@ page import="Torneos.DAO.TournamentDAO" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="Torneos.Objetos.Ubicacion" %>
+<%@ page import="Torneos.DAO.UbicacionDAO" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="../utiles/header.jsp" />
 <%
@@ -13,16 +16,16 @@
   Database database = new Database();
   database.connect();
   TournamentDAO torneoDAO = new TournamentDAO(database.getConexion());
+  UbicacionDAO ubicacionDAO = new UbicacionDAO(database.getConexion());
+  ArrayList<Ubicacion> ubicaciones = ubicacionDAO.getAll();
 
   if ("POST".equalsIgnoreCase(request.getMethod())) {
-    // Obtener datos del formulario
     int id = Integer.parseInt(request.getParameter("id"));
     String nombre = request.getParameter("nombre");
     String formato = request.getParameter("formato");
     String fechaInicioStr = request.getParameter("fechaInicio");
     String fechaFinStr = request.getParameter("fechaFin");
 
-    // Conversión String -> util.Date
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Date fechaInicio = null;
     Date fechaFin = null;
@@ -34,7 +37,6 @@
       mensaje = "Error en el formato de fechas.";
     }
 
-    // Conversión util.Date -> sql.Date
     java.sql.Date sqlFechaInicio = null;
     java.sql.Date sqlFechaFin = null;
     if (fechaInicio != null && fechaFin != null) {
@@ -45,8 +47,9 @@
     double premio = Double.parseDouble(request.getParameter("premio"));
     int maxJugadores = Integer.parseInt(request.getParameter("maxJugadores"));
     boolean invitacion = request.getParameter("invitacion") != null;
+    int ubicacionId = Integer.parseInt(request.getParameter("ubicacion_id"));
 
-    torneo = new Tournament(id, nombre, formato, sqlFechaInicio, sqlFechaFin, premio, maxJugadores, invitacion);
+    torneo = new Tournament(id, nombre, formato, sqlFechaInicio, sqlFechaFin, premio, maxJugadores, invitacion, ubicacionId);
     torneoDAO.actualizar(torneo);
     mensaje = "Torneo actualizado correctamente.";
 
@@ -109,6 +112,17 @@
     <div class="form-check mb-3">
       <input class="form-check-input" type="checkbox" name="invitacion" <%= torneo.isInvitacion() ? "checked" : "" %>>
       <label class="form-check-label">Torneo por invitación</label>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Ubicación</label>
+      <select class="form-select" name="ubicacion_id" required>
+        <% for (Ubicacion u : ubicaciones) { %>
+        <option value="<%= u.getId() %>" <%= (u.getId() == torneo.getUbicacion_id()) ? "selected" : "" %>>
+          <%= u.getNombre() %>
+        </option>
+        <% } %>
+      </select>
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>

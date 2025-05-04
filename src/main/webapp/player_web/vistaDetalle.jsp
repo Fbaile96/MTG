@@ -52,11 +52,8 @@
                 <td><%= jugador.isAdministrador() ? "Sí" : "No" %></td>
                 <td>
                     <% if (isAdmin != null && isAdmin) { %>
-                    <!-- Solo los administradores pueden ver estas opciones -->
                     <div class="btn-group btn-group-sm">
-                        <a href="editar.jsp?id=<%= jugador.getId() %>" class="btn btn-outline-primary">
-                            <i class="bi bi-pencil"></i> Modificar
-                        </a>
+                        <a href="editar.jsp?id=<%= jugador.getId() %>" class="btn btn-warning btn-sm">Editar</a>
                         <form action="eliminar.jsp" method="post" style="display:inline;">
                             <input type="hidden" name="id" value="<%= jugador.getId() %>">
                             <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>

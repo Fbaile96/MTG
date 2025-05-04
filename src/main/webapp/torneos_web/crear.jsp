@@ -18,6 +18,13 @@
       String premioStr = request.getParameter("premio");
       String maxJugadoresStr = request.getParameter("maxJugadores");
       boolean invitacion = request.getParameter("invitacion") != null;
+      String locationIdStr = request.getParameter("locationId");
+      int locationId = 0;
+      try {
+        locationId = Integer.parseInt(locationIdStr);
+      } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("La ubicación seleccionada no es válida");
+      }
 
       // Validaciones básicas
       if (nombre == null || nombre.trim().isEmpty()) {
@@ -74,10 +81,9 @@
       torneo.setPremio((float) premio);
       torneo.setMaxJugadores(maxJugadores);
       torneo.setInvitacion(invitacion);
+      torneo.setUbicacion_id(locationId);
 
-      // Guardar el torneo utilizando el DAO
-      Database db = new Database();
-      db.connect();
+
       torneoDAO.crear(torneo);
 
       mensaje = "Torneo guardado correctamente.";
@@ -158,6 +164,24 @@
           <input type="checkbox" class="form-check-input" id="invitacion" name="invitacion">
           <label class="form-check-label" for="invitacion">Solo por invitación</label>
         </div>
+        <div class="mb-3">
+        <label for="locationId" class="form-label">Ubicación</label>
+        <select class="form-select" id="locationId" name="locationId" required>
+          <option value="">Seleccione una ubicación</option>
+          <%
+            // Usar la clase correcta UbicacionDAO y su respectivo paquete
+            Torneos.DAO.UbicacionDAO ubicacionDAO = new Torneos.DAO.UbicacionDAO(database.getConexion());
+            List<Torneos.Objetos.Ubicacion> ubicaciones = ubicacionDAO.getAll();
+            for (Torneos.Objetos.Ubicacion ubicacion : ubicaciones) {
+          %>
+          <option value="<%= ubicacion.getId() %>"><%= ubicacion.getNombre() %> - <%= ubicacion.getCiudad() %></option>
+          <%
+            }
+          %>
+
+        </select>
+        <div class="invalid-feedback">Por favor selecciona una ubicación.</div>
+    </div>
         <div class="d-grid gap-2">
           <button type="submit" class="btn btn-primary">Guardar Torneo</button>
           <a href="lista.jsp" class="btn btn-secondary">Lista de Torneos</a>

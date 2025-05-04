@@ -14,7 +14,7 @@
         <div class="datos-contacto">
           <p>Telefono: +34 123 456 789</p>
           <p>Email: contacto@contacto.com</p>
-          <p>Direccion: Calle Magica 123, Ciudad, Pais</p>
+          <p>Direccion: Calle Magica 123, Ciudad</p>
         </div>
       </div>
     </div>
