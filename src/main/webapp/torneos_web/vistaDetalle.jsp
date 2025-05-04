@@ -1,14 +1,16 @@
 <%@ page import="Torneos.Objetos.Tournament" %>
+<%@ page import="Torneos.Objetos.Ubicacion" %>
 <%@ page import="Torneos.Database.Database" %>
 <%@ page import="Torneos.DAO.TournamentDAO" %>
+<%@ page import="Torneos.DAO.UbicacionDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="../utiles/header.jsp" />
-<%Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");%>
+<% Boolean isAdmin = (Boolean) session.getAttribute("isAdmin"); %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Detalle</title>
+    <title>Detalle Torneo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -28,21 +30,23 @@
                 <th>Premio (€)</th>
                 <th>Max. Jugadores</th>
                 <th>Invitación</th>
+                <th>Ubicación</th>
                 <th>Acciones</th>
             </tr>
             </thead>
             <tbody>
             <%
-                // Conectar a la base de datos y obtener los torneos directamente
+                // Conectar a la base de datos y obtener los torneos
                 Database database = new Database();
                 database.connect();
                 TournamentDAO torneoDAO = new TournamentDAO(database.getConexion());
-                int id = Integer.parseInt(request.getParameter("id")); // obtener el id del torneo desde la URL
-                Tournament torneo = torneoDAO.buscarPorId(id); // buscar un solo torneo
-            System.out.println("Buscando torneo con ID: " + id);
+                int id = Integer.parseInt(request.getParameter("id")); // Obtener el id del torneo
+                Tournament torneo = torneoDAO.buscarPorId(id); // Buscar el torneo
 
-
-            if (torneo != null) {
+                if (torneo != null) {
+                    // Obtener la ubicación del torneo
+                    UbicacionDAO ubicacionDAO = new UbicacionDAO(database.getConexion());
+                    Ubicacion ubicacion = ubicacionDAO.getById(torneo.getUbicacion_id());
             %>
             <tr>
                 <td><%= torneo.getNombre() %></td>
@@ -53,20 +57,34 @@
                 <td><%= torneo.getMaxJugadores() %></td>
                 <td><%= torneo.isInvitacion() ? "Sí" : "No" %></td>
                 <td>
-                    <% if (isAdmin != null && isAdmin) { %>
-                <!-- Solo los administradores pueden ver estas opciones -->
-                <div class="btn-group btn-group-sm">
-                    <a href="editar.jsp?id=<%= torneo.getId() %>" class="btn btn-outline-primary">
-                        <i class="bi bi-pencil"></i> Modificar
+                    <%
+                        if (ubicacion != null) {
+                    %>
+                    <a href="../ubicacion_web/vistaDetalle.jsp?id=<%= ubicacion.getId() %>">
+                        <%= ubicacion.getNombre() %> - <%= ubicacion.getCiudad() %>
                     </a>
-                    <form action="eliminar.jsp" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= torneo.getId() %>">
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
-                </div>
-                <% } else { %>
-                <div>Requiere Admin</div>
-                <% } %></td>
+                    <%
+                    } else {
+                    %>
+                    <span>No disponible</span>
+                    <%
+                        }
+                    %>
+                </td>
+
+                <td>
+                    <% if (isAdmin != null && isAdmin) { %>
+                    <div class="btn-group btn-group-sm">
+                        <a href="editar.jsp?id=<%= torneo.getId() %>" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="eliminar.jsp" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="<%= torneo.getId() %>">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </div>
+                    <% } else { %>
+                    <div>Requiere Admin</div>
+                    <% } %>
+                </td>
             </tr>
             <%
                 }

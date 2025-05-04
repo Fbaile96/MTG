@@ -78,7 +78,7 @@ public class TournamentDAO {
 
     public void crear(Tournament tournament) throws SQLException{
          {
-            String sql = "INSERT INTO tournament (nombre, formato, fecha_inicio, fecha_fin, premio, max_jugadores, invitacion) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO tournament (nombre, formato, fecha_inicio, fecha_fin, premio, max_jugadores, invitacion, ubicacion_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
              PreparedStatement stmt = conexion.prepareStatement(sql);
             stmt.setString(1, tournament.getNombre());
             stmt.setString(2, tournament.getFormato());
@@ -87,19 +87,23 @@ public class TournamentDAO {
             stmt.setDouble(5, tournament.getPremio());
             stmt.setInt(6, tournament.getMaxJugadores());
             stmt.setBoolean(7, tournament.isInvitacion());
+            stmt.setInt(8, tournament.getUbicacion_id());
             stmt.executeUpdate();
         }
     }
 
     public ArrayList<Tournament> buscarPorNombreYFormato(String nombre, String formato) throws SQLException {
         ArrayList<Tournament> lista = new ArrayList<>();
-        String sql = "SELECT * FROM tournament WHERE 1=1";
+        String sql = "SELECT t.*, u.nombre AS nombre_ubicacion " +
+                "FROM tournament t " +
+                "JOIN ubicaciones u ON t.ubicacion_id = u.id " +
+                "WHERE 1=1";
 
         if (nombre != null && !nombre.isEmpty()) {
-            sql += " AND LOWER(nombre) LIKE LOWER(?)";
+            sql += " AND LOWER(t.nombre) LIKE LOWER(?)";
         }
         if (formato != null && !formato.isEmpty()) {
-            sql += " AND LOWER(formato) LIKE LOWER(?)";
+            sql += " AND LOWER(t.formato) LIKE LOWER(?)";
         }
 
         PreparedStatement stmt = conexion.prepareStatement(sql);
@@ -123,7 +127,9 @@ public class TournamentDAO {
                     rs.getInt("max_jugadores"),
                     rs.getBoolean("invitacion")
             );
-            torneo.setId(rs.getInt("id")); // <-- importante si necesitas el ID para la vistaDetalle
+            torneo.setId(rs.getInt("id"));
+            torneo.setUbicacion_id(rs.getInt("ubicacion_id"));
+            torneo.setUbicacionNombre(rs.getString("nombre_ubicacion"));
             lista.add(torneo);
         }
         return lista;
@@ -144,7 +150,8 @@ public class TournamentDAO {
                             rs.getDate("fecha_fin"),
                             rs.getDouble("premio"),
                             rs.getInt("max_jugadores"),
-                            rs.getBoolean("invitacion")
+                            rs.getBoolean("invitacion"),
+                            rs.getInt("ubicacion_id")
                     );
                 }
             }
@@ -155,7 +162,8 @@ public class TournamentDAO {
         return torneo;
     }
     public void actualizar(Tournament torneo) {
-        String sql = "UPDATE " + TABLE_NAME + " SET nombre = ?, formato = ?, fecha_inicio = ?, fecha_fin = ?, premio = ?, max_jugadores = ?, invitacion = ? WHERE id = ?";
+        String sql = "UPDATE " + TABLE_NAME +
+                " SET nombre = ?, formato = ?, fecha_inicio = ?, fecha_fin = ?, premio = ?, max_jugadores = ?, invitacion = ?, ubicacion_id = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, torneo.getNombre());
             stmt.setString(2, torneo.getFormato());
@@ -164,8 +172,8 @@ public class TournamentDAO {
             stmt.setDouble(5, torneo.getPremio());
             stmt.setInt(6, torneo.getMaxJugadores());
             stmt.setBoolean(7, torneo.isInvitacion());
-            stmt.setInt(8, torneo.getId());
-            stmt.executeUpdate();
+            stmt.setInt(8, torneo.getUbicacion_id());
+            stmt.setInt(9, torneo.getId());
             int filasActualizadas = stmt.executeUpdate();
             if (filasActualizadas == 0) {
                 System.out.println("No se actualizó ningún torneo. ¿El ID existe?");
@@ -176,7 +184,6 @@ public class TournamentDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
     public ArrayList<Tournament> listAll(int limit, int offset) throws SQLException {
         String sql = "SELECT * FROM tournament LIMIT ? OFFSET ?";

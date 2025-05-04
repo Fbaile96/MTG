@@ -15,6 +15,8 @@ public class Tournament {
     private float premio;
     private int maxJugadores;
     private boolean invitacion;
+    private int ubicacion_id;
+    private String ubicacionNombre;
 
         public Tournament(String nombre, String formato, Date fechaInicio, Date fechaFin,
                           double premio, int maxJugadores, boolean invitacion) {
@@ -32,7 +34,7 @@ public class Tournament {
     }
 
     public Tournament(int id, String nombre, String formato, Date fechaInicio, Date fechaFin,
-                      double premio, int maxJugadores, boolean invitacion) {
+                      double premio, int maxJugadores, boolean invitacion, int ubicacion_id) {
         this.id = id;
         this.nombre = nombre;
         this.formato = formato;
@@ -41,7 +43,8 @@ public class Tournament {
         this.premio = (float) premio;
         this.maxJugadores = maxJugadores;
         this.invitacion = invitacion;
-    }
+        this.ubicacion_id = ubicacion_id;
 
+    }
 
 }

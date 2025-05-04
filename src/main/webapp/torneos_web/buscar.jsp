@@ -56,6 +56,7 @@
       <th>Premio (€)</th>
       <th>Máx. Jugadores</th>
       <th>Invitación</th>
+      <th>Ubicación</th>
       <th>Acciones</th>
     </tr>
     </thead>
@@ -71,6 +72,7 @@
       <td><%= tournament.getPremio() %></td>
       <td><%= tournament.getMaxJugadores() %></td>
       <td><%= tournament.isInvitacion() ? "Sí" : "No" %></td>
+      <td><%= tournament.getUbicacionNombre() %></td>
       <td>
         <div class="btn-group btn-group-sm">
           <a href="vistaDetalle.jsp?id=<%= tournament.getId() %>" class="btn btn-outline-primary">
@@ -78,7 +80,6 @@
           </a>
         </div>
       </td>
-
     </tr>
     <%
       }

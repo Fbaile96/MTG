@@ -24,7 +24,7 @@ public class DeckDAO {
     private final static String COLUMN_PORCENTAJE_TIERRAS = "porcentaje_tierras";
     private final static String COLUMN_FECHA_ENVIO = "fecha_envio";
     private final static String COLUMN_VALIDO = "valido";
-    private final static String COLUMN_JUGADOR_ID = "jugador_id";
+    private final static String COLUMN_JUGADOR_ID = "player_id";
 
 
     public void add(Deck deck) throws SQLException {

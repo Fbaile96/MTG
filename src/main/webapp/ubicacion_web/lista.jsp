@@ -1,15 +1,15 @@
-<%@ page import="java.sql.*, java.text.*, java.util.*, java.util.List, Torneos.DAO.DeckDAO, Torneos.Objetos.Deck, Torneos.Database.Database" %>
+<%@ page import="java.sql.*, java.util.*, java.util.List, Torneos.DAO.UbicacionDAO, Torneos.Objetos.Ubicacion, Torneos.Database.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="../utiles/header.jsp" />
 <%
     Database database = new Database();
     database.connect();
-    DeckDAO deckDao = new DeckDAO(database.getConexion());
-    List<Deck> decks = new ArrayList<>();
+    UbicacionDAO ubicacionDao = new UbicacionDAO(database.getConexion());
+    List<Ubicacion> ubicaciones = new ArrayList<>();
     String mensaje = "";
     String tipoMensaje = "";
     int pagina = 1;
-    int decksPorPagina = 4;
+    int ubicacionesPorPagina = 4;
 
     String paramPagina = request.getParameter("pagina");
     if (paramPagina != null) {
@@ -21,12 +21,12 @@
         }
     }
 
-    int offset = (pagina - 1) * decksPorPagina;
+    int offset = (pagina - 1) * ubicacionesPorPagina;
 
     try {
-        decks = deckDao.getAllPaginado(decksPorPagina, offset);
+        ubicaciones = ubicacionDao.getAllPaginado(ubicacionesPorPagina, offset);
     } catch (Exception e) {
-        mensaje = "Error al recuperar los decks: " + e.getMessage();
+        mensaje = "Error al recuperar las ubicaciones: " + e.getMessage();
         tipoMensaje = "danger";
         e.printStackTrace();
     }
@@ -46,7 +46,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Decks</title>
+    <title>Lista de Ubicaciones</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -55,21 +55,21 @@
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Lista de Decks</h2>
+        <h2>Lista de Ubicaciones</h2>
     </div>
 
-        <% if (!mensaje.isEmpty()) { %>
+    <% if (!mensaje.isEmpty()) { %>
     <div class="alert alert-<%= tipoMensaje %> alert-dismissible fade show" role="alert">
         <%= mensaje %>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-        <% } %>
+    <% } %>
 
     <div class="card shadow">
         <div class="card-body">
-            <% if (decks.isEmpty()) { %>
+            <% if (ubicaciones.isEmpty()) { %>
             <div class="text-center p-4">
-                <p class="text-muted">No hay decks registrados.</p>
+                <p class="text-muted">No hay ubicaciones registradas.</p>
             </div>
             <% } else { %>
             <div class="table-responsive">
@@ -77,28 +77,20 @@
                     <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Cartas Totales</th>
-                        <th>Porcentaje Tierras</th>
-                        <th>Válido</th>
+                        <th>Dirección</th>
+                        <th>Ciudad</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <% for (Deck deck : decks) { %>
+                    <% for (Ubicacion ubicacion : ubicaciones) { %>
                     <tr>
-                        <td><%= deck.getNombre() %></td>
-                        <td><%= deck.getCartasTotales() %></td>
-                        <td><%= deck.getPorcentajeTierras() %>%</td>
-                        <td>
-                            <% if (deck.isValido()) { %>
-                            <span class="badge bg-success">Sí</span>
-                            <% } else { %>
-                            <span class="badge bg-secondary">No</span>
-                            <% } %>
-                        </td>
+                        <td><%= ubicacion.getNombre() %></td>
+                        <td><%= ubicacion.getDireccion() %></td>
+                        <td><%= ubicacion.getCiudad() %></td>
                         <td>
                             <div class="btn-group btn-group-sm">
-                                <a href="vistaDetalle.jsp?id=<%= deck.getId() %>" class="btn btn-outline-primary">
+                                <a href="vistaDetalle.jsp?id=<%= ubicacion.getId() %>" class="btn btn-outline-primary">
                                     <i class="bi bi-eye"></i>
                                 </a>
                             </div>
@@ -111,9 +103,11 @@
             <% } %>
         </div>
     </div>
+
     <div class="d-grid gap-2">
         <a href="../main.jsp" class="btn btn-secondary">Volver</a>
     </div>
+
     <div class="d-flex justify-content-between mt-3">
         <% if (pagina > 1) { %>
         <a href="lista.jsp?pagina=<%= pagina - 1 %>" class="btn btn-outline-primary">
@@ -123,7 +117,7 @@
         <span></span>
         <% } %>
 
-        <% if (decks.size() == decksPorPagina) { %>
+        <% if (ubicaciones.size() == ubicacionesPorPagina) { %>
         <a href="lista.jsp?pagina=<%= pagina + 1 %>" class="btn btn-outline-primary">
             Siguiente <i class="bi bi-chevron-right"></i>
         </a>
@@ -131,9 +125,9 @@
         <span></span>
         <% } %>
     </div>
+</div>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <jsp:include page="../utiles/footer.jsp" />

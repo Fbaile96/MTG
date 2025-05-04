@@ -10,6 +10,7 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container-fluid">
             <a class="navbar-brand" href="../main.jsp">Torneos MTG</a>
+            <a href="../perfil.jsp" class="btn btn-outline-light">Mi perfil</a>
             <a href="../login.jsp" class="btn btn-outline-light">Ingresar</a>
         </div>
     </nav>
